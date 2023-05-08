@@ -1,8 +1,10 @@
 package com.arbab.springboot.controller;
 
+import com.arbab.springboot.exception.ResourceNotFoundException;
 import com.arbab.springboot.model.Employee;
 import com.arbab.springboot.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,5 +24,12 @@ public class EmployeeController {
     @PostMapping("/employees")
     public Employee createEmployee(@RequestBody Employee employee){
         return employeeRepository.save(employee);
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<Employee> getEmployee(@PathVariable long id) {
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("Employee not exit wit id:"+ id));
+        return ResponseEntity.ok(employee);
     }
 }
