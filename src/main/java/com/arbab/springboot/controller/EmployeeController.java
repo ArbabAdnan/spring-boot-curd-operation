@@ -32,4 +32,16 @@ public class EmployeeController {
                 .orElseThrow(()-> new ResourceNotFoundException("Employee not exit wit id:"+ id));
         return ResponseEntity.ok(employee);
     }
+
+    @PutMapping("{id}")
+    public ResponseEntity<Employee> updateEmployee(@PathVariable long id, @RequestBody Employee employee){
+        Employee updateEmployee=employeeRepository.findById(id)
+                .orElseThrow(()->new ResourceNotFoundException("Employee not exit with id: "+id));
+        updateEmployee.setFirstname(employee.getFirstname());
+        updateEmployee.setLastname(employee.getLastname());
+        updateEmployee.setEmailId(employee.getLastname());
+
+        employeeRepository.save(updateEmployee);
+        return ResponseEntity.ok(updateEmployee);
+    }
 }
